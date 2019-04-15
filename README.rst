@@ -1,4 +1,4 @@
-Water Usage data repo
+Python examples repo
 ==================================
 
-This git repository contains code for processing water usage data.
+This git repository contains python example code for various purposes. 
