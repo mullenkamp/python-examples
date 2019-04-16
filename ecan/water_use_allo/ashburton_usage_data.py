@@ -32,12 +32,18 @@ freq = 'A-JUN'
 from_date = '2012-07-01'
 to_date = '2018-06-30'
 
-export_dir = r'E:\ecan\shared\projects\ashburton\2019-03-25'
+py_path = os.path.realpath(os.path.dirname(__file__))
+
 plot_dir = 'plots'
 export2 = 'swaz_allo_usage_2019-03-25.csv'
 export3 = 'swaz_allo_usage_pivot_2019-03-25.csv'
 
 now1 = str(datetime.now().date())
+
+plot_path = os.path.join(py_path, plot_dir)
+
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
 
 ############################################
 ### Extract data
@@ -50,7 +56,7 @@ a1 = AlloUsage(from_date, to_date, site_filter=site_filter, crc_filter=crc_filte
 
 combo_ts = a1.get_ts(datasets, freq, ['SwazName', 'use_type', 'date'], irr_season=True)
 
-combo_ts.to_csv(os.path.join(export_dir, export2))
+combo_ts.to_csv(os.path.join(py_path, export2))
 
 
 #########################################
@@ -58,16 +64,16 @@ combo_ts.to_csv(os.path.join(export_dir, export2))
 
 ### Grouped
 ## Lumped
-a1.plot_group('A-JUN', group='SwazGroupName', export_path=os.path.join(export_dir, plot_dir), irr_season=True)
+a1.plot_group('A-JUN', group='SwazGroupName', export_path=plot_path, irr_season=True)
 
 ## broken up
-a1.plot_group('A-JUN', group='SwazName', export_path=os.path.join(export_dir, plot_dir), irr_season=True)
+a1.plot_group('A-JUN', group='SwazName', export_path=plot_path, irr_season=True)
 
 ### Stacked
 ## lumped
-a1.plot_stacked('A-JUN', group='SwazGroupName', export_path=os.path.join(export_dir, plot_dir), irr_season=True)
+a1.plot_stacked('A-JUN', group='SwazGroupName', export_path=plot_path, irr_season=True)
 
 ## broken up
-a1.plot_stacked('A-JUN', group='SwazName', export_path=os.path.join(export_dir, plot_dir), irr_season=True)
+a1.plot_stacked('A-JUN', group='SwazName', export_path=plot_path, irr_season=True)
 
 

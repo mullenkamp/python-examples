@@ -24,7 +24,7 @@ lf_cols = ['site', 'date', 'restr_category']
 from_date = '2018-01-01'
 to_date = '2018-02-28'
 
-py_dir = os.path.realpath(os.path.dirname(__file__))
+py_path = os.path.realpath(os.path.dirname(__file__))
 lf_cat_csv = 'lowflow_categories.csv'
 lf_cwms_csv = 'lowflow_cwms_summ.csv'
 
