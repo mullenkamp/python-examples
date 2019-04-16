@@ -9,3 +9,4 @@ dependencies:
 - gistools
 - seaborn
 - ecanallousagetools
+- hilltop-py
