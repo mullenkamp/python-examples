@@ -24,9 +24,9 @@ lf_cols = ['site', 'date', 'restr_category']
 from_date = '2018-01-01'
 to_date = '2018-02-28'
 
-export_path = r'E:\ecan\local\Projects\requests\AnitaF\2019-04-09'
-lf_cat_csv = 'lowflow_categories_2019-04-09.csv'
-lf_cwms_csv = 'lowflow_cwms_summ_2019-04-09.csv'
+py_dir = os.path.realpath(os.path.dirname(__file__))
+lf_cat_csv = 'lowflow_categories.csv'
+lf_cwms_csv = 'lowflow_cwms_summ.csv'
 
 
 ############################################
@@ -54,74 +54,6 @@ cwms1 = both1.groupby('CwmsName').category.value_counts().unstack(1)
 cwms1[cwms1.isnull()] = 0
 cwms1 = cwms1.astype(int)
 
-both1.to_csv(os.path.join(export_path, lf_cat_csv), index=False)
-cwms1.to_csv(os.path.join(export_path, lf_cwms_csv))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+both1.to_csv(os.path.join(py_dir, lf_cat_csv), index=False)
+cwms1.to_csv(os.path.join(py_dir, lf_cwms_csv))
 
