@@ -42,14 +42,19 @@ qual_codes = [200, 400, 500, 520, 600]
 
 site = '65120'
 
-export_dir = r'E:\ecan\local\Projects\requests\jeanine\2018-10-16'
+py_path = os.path.realpath(os.path.dirname(__file__))
 fig_sub_dir = 'plots'
 export_summ1 = 'summary_2018-10-16.csv'
+
+plot_path = os.path.join(py_path, fig_sub_dir)
+
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
 
 ############################################
 ### Extract summary data and determine the appropriate sites to use
 
-rec_summ_data = mssql.rd_sql(server, database, ts_summ_table, where_col={'DatasetTypeID': rec_datasets})
+rec_summ_data = mssql.rd_sql(server, database, ts_summ_table, where_in={'DatasetTypeID': rec_datasets})
 rec_summ_data.FromDate = pd.to_datetime(rec_summ_data.FromDate)
 rec_summ_data.ToDate = pd.to_datetime(rec_summ_data.ToDate)
 
@@ -66,7 +71,7 @@ rec_sites.remove(site)
 ###########################################
 ### Get site data
 
-site_xy = mssql.rd_sql(server, database, sites_table, ['ExtSiteID', 'ExtSiteName', 'NZTMX', 'NZTMY'], where_col={'ExtSiteID': list(all_sites)})
+site_xy = mssql.rd_sql(server, database, sites_table, ['ExtSiteID', 'ExtSiteName', 'NZTMX', 'NZTMY'], where_in={'ExtSiteID': list(all_sites)})
 
 geometry = [Point(xy) for xy in zip(site_xy['NZTMX'], site_xy['NZTMY'])]
 site_xy1 = gpd.GeoDataFrame(site_xy['ExtSiteID'], geometry=geometry, crs=2193)
@@ -82,15 +87,14 @@ for g in gauge_xy.index:
     print(g)
 
     ## Determine recorder sites within search distance
-    gauge_loc = gauge_xy.loc[[g]].buffer(search_dis)
-    near_rec_sites = sel_sites_poly(rec_xy, gauge_loc)
+    near_rec_sites = sel_sites_poly(rec_xy, gauge_xy.loc[[g]], search_dis)
     print('There are ' + str(len(near_rec_sites)) + ' recorder sites within range')
 
     ## Extract all ts data
-    g_data = mssql.rd_sql(server, database, ts_daily_table, ['ExtSiteID', 'DateTime', 'Value'], where_col={'DatasetTypeID': man_datasets, 'ExtSiteID': [g], 'QualityCode': qual_codes}, from_date=min_date, date_col='DateTime')
+    g_data = mssql.rd_sql(server, database, ts_daily_table, ['ExtSiteID', 'DateTime', 'Value'], where_in={'DatasetTypeID': man_datasets, 'ExtSiteID': [g], 'QualityCode': qual_codes}, from_date=min_date, date_col='DateTime')
     g_data.DateTime = pd.to_datetime(g_data.DateTime)
     g_data.loc[g_data.Value <= 0, 'Value'] = np.nan
-    r_data = mssql.rd_sql(server, database, ts_daily_table, ['ExtSiteID', 'DateTime', 'Value'], where_col={'DatasetTypeID': rec_datasets, 'ExtSiteID': near_rec_sites.index.tolist(), 'QualityCode': qual_codes}, from_date=min_date, date_col='DateTime')
+    r_data = mssql.rd_sql(server, database, ts_daily_table, ['ExtSiteID', 'DateTime', 'Value'], where_in={'DatasetTypeID': rec_datasets, 'ExtSiteID': near_rec_sites.index.tolist(), 'QualityCode': qual_codes}, from_date=min_date, date_col='DateTime')
     r_data.DateTime = pd.to_datetime(r_data.DateTime)
     r_data.loc[r_data.Value <= 0, 'Value'] = np.nan
 
@@ -105,9 +109,9 @@ for g in gauge_xy.index:
 
     ## regressions!
     lm1 = LM(r_data1, g_data1)
-    ols1_log = lm1.run('ols', 1, x_transform='log', y_transform='log', min_obs=min_count)
-    ols2_log = lm1.run('ols', 2, x_transform='log', y_transform='log', min_obs=min_count)
-    ols3_log = lm1.run('ols', 3, x_transform='log', y_transform='log', min_obs=min_count)
+    ols1_log = lm1.predict('ols', 1, x_transform='log', y_transform='log', min_obs=min_count)
+    ols2_log = lm1.predict('ols', 2, x_transform='log', y_transform='log', min_obs=min_count)
+    ols3_log = lm1.predict('ols', 3, x_transform='log', y_transform='log', min_obs=min_count)
 
     ## Save
     results_dict.update({g: {1: ols1_log, 2: ols2_log, 3: ols3_log}})
@@ -140,7 +144,7 @@ for s in range(1, 4):
 
                 ## Plots
                 fig = model1.plot_ccpr_grid(i)
-                fig.savefig(os.path.join(export_dir, fig_sub_dir, i + '_' + str(s) + '.png'), bbox_inches='tight')
+                fig.savefig(os.path.join(py_path, fig_sub_dir, i + '_' + str(s) + '.png'), bbox_inches='tight')
                 plt.close(fig)
 
     res_site1 = pd.DataFrame(res_list, columns=cols).set_index('site')
@@ -163,7 +167,7 @@ res_df['winner'] = winner
 
 
 ### Save data
-file_path = os.path.join(export_dir, export_summ1)
+file_path = os.path.join(py_path, export_summ1)
 res_df.reset_index().to_csv(file_path, index=False)
 
 

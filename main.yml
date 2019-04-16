@@ -1,4 +1,4 @@
-name: EcanConsents
+name: examples
 channels:
 - mullenkamp
 - conda-forge
@@ -6,3 +6,6 @@ channels:
 dependencies:
 - python=3.6
 - pdsql=1.2
+- gistools
+- seaborn
+- ecanallousagetools

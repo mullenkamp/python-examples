@@ -34,6 +34,9 @@ lf_cwms_csv = 'lowflow_cwms_summ.csv'
 
 lf1 = mssql.rd_sql(server, database, lf_sites_table, lf_cols, where_in={'site_type': ['LowFlow']}, from_date=from_date, to_date=to_date, date_col='date')
 
+lf1.loc[lf1['restr_category'] == 'Deactivated', 'restr_category'] = 'No'
+lf1.loc[lf1['restr_category'] == 'Full', 'restr_category'] = 'Partial'
+
 sites1 = mssql.rd_sql(server, database, sites_table, sites_cols, where_in={'ExtSiteID': lf1.site.unique().tolist()})
 sites1.rename(columns={'ExtSiteID': 'site'}, inplace=True)
 

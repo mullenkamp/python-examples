@@ -1,0 +1,3 @@
+site,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,winner
+,nrmse,Adj R2,nobs,y range,f value,f p value,dep sites,reg params,nrmse,Adj R2,nobs,y range,f value,f p value,dep sites,reg params,nrmse,Adj R2,nobs,y range,f value,f p value,dep sites,reg params,
+65120,6.56547,0.848,33.0,29.2904,179.03,0.0,['65905'],"[-0.30764, 1.41287]",8.11192,0.911,28.0,29.2894,139.427,0.0,"['64902', '65905']","[0.01418, 0.12888, 1.25948]",0.99673,0.963,22.0,8.5054,184.205,0.0,"['65106', '65905', '66201']","[-0.93174, -1.26707, 1.94756, 0.61661]",3
