@@ -10,3 +10,4 @@ dependencies:
 - seaborn
 - ecanallousagetools
 - hilltop-py
+- spyder
