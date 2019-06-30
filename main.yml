@@ -10,4 +10,5 @@ dependencies:
 - seaborn
 - ecanallousagetools
 - hilltop-py
+- HydroLM
 - spyder
