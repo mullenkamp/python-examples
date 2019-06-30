@@ -1,7 +1,7 @@
 Python examples repo
 ==================================
 
-This git repository contains python example code for various purposes for ECan scientists and analysts. Some examples may work from outside of ECan's network, but no guarantees.
+This git repository contains python example code for various purposes for ECan scientists and analysts. Some examples may work from outside the ECan's network, but no guarantees.
 
 To get started, follow the steps below.
 
