@@ -19,7 +19,7 @@ plt.ioff()
 ############################################
 ### Parameters
 
-server = 'sql2012test01'
+server = 'edwprod01'
 database = 'hydro'
 ts_daily_table = 'TSDataNumericDaily'
 ts_hourly_table = 'TSDataNumericHourly'
@@ -175,7 +175,3 @@ res_df.reset_index().to_csv(file_path, index=False)
 
 ##################################################
 ### Testing
-
-
-
-
