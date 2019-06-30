@@ -37,3 +37,7 @@ To install via conda, type the following into the anaconda prompt when in the ro
 Run the code editor Spyder to run the Python code
 -------------------------------------------------
 Now that the code editor Spyder is installed on your PC, you can open Spyder and run the example code via Spyder.
+
+Learning Python
+---------------
+Follow the courses on the `Ecan Python Courses <https://ecanpythoncourse2019.readthedocs.io/en/latest/>`_ to learn the basics of Python and handling tabular data.
