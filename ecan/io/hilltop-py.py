@@ -5,6 +5,9 @@ Created on Wed May 30 12:05:46 2018
 @author: MichaelEK
 """
 from hilltoppy.web_service import measurement_list, site_list, get_data, wq_sample_parameter_list
+import pandas as pd
+
+pd.options.display.max_columns = 10
 
 ###########################################
 ### Parameters
@@ -39,4 +42,15 @@ tsdata3 = get_data(base_url, hts, site, 'WQ Sample', from_date=from_date, to_dat
 
 ## Convert values under the detection limit to numeric values (only applies to WQ data)
 tsdata4, extra4 = get_data(base_url, hts, site, measurement, from_date=from_date, to_date=to_date, parameters=True, dtl_method=dtl_method)
+
+## Get multiple measurement types for multiple sites
+site_list = sites.SiteName.tolist()
+
+mtype_list = []
+
+for s in site_list[10:20]:
+    mtypes1 = measurement_list(base_url, hts, s)
+    mtype_list.append(mtypes1)
+
+mtypes_all = pd.concat(mtype_list)
 
